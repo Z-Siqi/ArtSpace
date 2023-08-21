@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Art Space</string>
+    <string name="next">下一張</string>
+    <string name="previous">上一張</string>
+    <string name="siqi_2022">siqi_2022</string>
+    <string name="siqi_2021">Siqi(2021)</string>
+    <string name="siqi_2020">Siqi(2020)</string>
+    <string name="siqi_2023">Siqi(2023)</string>
+    <string name="waterwheel">水車</string>
+    <string name="sea_and_waves">海與波浪</string>
+    <string name="forest">樹林</string>
+    <string name="evening_glow">晚霞</string>
+    <string name="starry_sky">星空</string>
+    <string name="trees_and_leaves">樹與樹葉</string>
+    <string name="rock_and_stone">岩石與石頭</string>
+    <string name="snow_and_icicle">雪與冰柱</string>
+    <string name="trees_and_ocean">樹與海</string>
+    <string name="snow_mountain">雪山</string>
+    <string name="isiterror">Error(?): pictureNumber value is not in 0~11! (Easter egg)</string>
+    <string name="easter_egg"><![CDATA[Have a good day!\n& Support LGBTQ!]]></string>
+</resources>
