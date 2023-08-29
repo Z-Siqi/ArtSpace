@@ -16,6 +16,6 @@
     <string name="snow_and_icicle">Snow and Icicle</string>
     <string name="trees_and_ocean">Trees and Ocean</string>
     <string name="snow_mountain">Snow Mountain</string>
-    <string name="isiterror">Error(?): pictureNumber value is not in 0~11! (Easter egg)</string>
+    <string name="isiterror">YouMayClickTooFast.Error(?): pictureNumber value is not in 0~11! (Easter egg)</string>
     <string name="easter_egg"><![CDATA[Have a good day!\n& Support LGBTQ!]]></string>
 </resources>
