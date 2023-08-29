@@ -32,11 +32,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sqz.artspace.ui.theme.ArtSpaceTheme
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,15 +59,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ArtSpaceLayout(modifier: Modifier = Modifier) {
+internal fun ArtSpaceLayout(modifier: Modifier = Modifier) {
     var pictureNumber by remember { mutableStateOf(1) }
     val showPicture = pictureNumber
     val showText = pictureNumber
 
     if (pictureNumber == 0) {
-        pictureNumber = 10
+        Timer().schedule(120L) {
+            if (pictureNumber == 0) {
+                pictureNumber = 10
+            }
+        }
     } else if (pictureNumber == 11) {
-        pictureNumber = 1
+        Timer().schedule(100L) {
+            if (pictureNumber == 11) {
+                pictureNumber = 1
+            }
+        }
+    } else if (pictureNumber >= 12) {
+        pictureNumber = 12
     }
     Column(
         modifier = modifier
@@ -76,6 +90,7 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier) {
     ) {
         Box(
             modifier = modifier
+                .padding(bottom = 20.dp)
                 .background(color = MaterialTheme.colorScheme.secondaryContainer)
                 .shadow(elevation = 5.dp, RoundedCornerShape(3.dp))
                 .border(
@@ -86,58 +101,79 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             BoxWithConstraints {
-                if ((maxHeight > 800.dp) || (maxWidth > 500.dp)) {
+                if ((maxHeight > 700.dp) && (maxWidth > 1100.dp)) {
+                    ArtSpaceImage(
+                        modifier = modifier
+                            .height(580.dp)
+                            .width(480.dp),
+                        showPicture
+                    )
+                } else if ((maxHeight > 700.dp) && (maxWidth > 390.dp)) {
                     ArtSpaceImage(
                         modifier = modifier
                             .height(450.dp)
                             .width(320.dp),
                         showPicture
                     )
-                }else{
+                } else if ((maxHeight > 290.dp) && (maxWidth > 510.dp)) {
+                    ArtSpaceImage(
+                        modifier = modifier
+                            .height(360.dp)
+                            .width(480.dp),
+                        showPicture
+                    )
+                } else {
                     ArtSpaceImage(
                         modifier = modifier
                             .height(380.dp)
-                            .width(260.dp),
+                            .width(270.dp),
                         showPicture
                     )
                 }
             }
         }
-        Spacer(modifier = modifier.height(50.dp))
-        if ((pictureNumber <= 11) && (pictureNumber >=0)) {
+        BoxWithConstraints {
+            if (maxHeight > 300.dp) {
+                Spacer(modifier = modifier.height(50.dp))
+            } else if (maxHeight > 200.dp) {
+                Spacer(modifier = modifier.height(20.dp))
+            }
+        }
+        if ((pictureNumber <= 11) && (pictureNumber >= 0)) {
             Box(
                 modifier = modifier
                     .background(color = MaterialTheme.colorScheme.primaryContainer)
                     .width(240.dp)
                     .height(80.dp)
+                    .shadow(elevation = 1.dp)
                     .padding(start = 10.dp, top = 5.dp),
                 contentAlignment = Alignment.TopCenter
             ) { ArtSpaceText(showText) }
-        }else{
+        } else {
             Box(
                 modifier = modifier
                     .background(color = MaterialTheme.colorScheme.errorContainer)
                     .width(300.dp)
-                    .height(120.dp)
+                    .height(140.dp)
                     .padding(start = 10.dp, top = 5.dp),
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.TopCenter,
             ) { ArtSpaceText(showText) }
         }
     }
     ChangePictureButton(
         onClick = { pictureNumber-- },
-        Text = stringResource(R.string.previous),
+        text = stringResource(R.string.previous),
         horizontalAlignment = Alignment.Start
     )
     ChangePictureButton(
         onClick = { pictureNumber++ },
-        Text = stringResource(R.string.next),
+        text = stringResource(R.string.next),
         horizontalAlignment = Alignment.End
     )
 }
 
 @Composable
-private fun ArtSpaceImage(modifier: Modifier = Modifier, showPicture: Int) {
+fun ArtSpaceImage(modifier: Modifier = Modifier, showPicture: Int) {
     val image = when (showPicture) {
         0 -> R.drawable.picture_10
         1 -> R.drawable.picture_1
@@ -166,47 +202,37 @@ fun ArtSpaceText(
     showText: Int,
     modifier: Modifier = Modifier
 ) {
-    val textNumber = when (showText) {
-        0 -> stringResource(R.string.snow_mountain)
-        1 -> stringResource(R.string.waterwheel)
-        2 -> stringResource(R.string.sea_and_waves)
-        3 -> stringResource(R.string.forest)
-        4 -> stringResource(R.string.evening_glow)
-        5 -> stringResource(R.string.starry_sky)
-        6 -> stringResource(R.string.trees_and_leaves)
-        7 -> stringResource(R.string.rock_and_stone)
-        8 -> stringResource(R.string.snow_and_icicle)
-        9 -> stringResource(R.string.trees_and_ocean)
-        10 -> stringResource(R.string.snow_mountain)
-        11 -> stringResource(R.string.waterwheel)
-        else -> stringResource(R.string.isiterror)
+    val texts = when (showText) {
+        0 -> DataActivity(R.string.snow_mountain, R.string.siqi_2022)
+        1 -> DataActivity(R.string.waterwheel, R.string.siqi_2022)
+        2 -> DataActivity(R.string.sea_and_waves, R.string.siqi_2021)
+        3 -> DataActivity(R.string.forest, R.string.siqi_2022)
+        4 -> DataActivity(R.string.evening_glow, R.string.siqi_2022)
+        5 -> DataActivity(R.string.starry_sky, R.string.siqi_2021)
+        6 -> DataActivity(R.string.trees_and_leaves, R.string.siqi_2020)
+        7 -> DataActivity(R.string.rock_and_stone, R.string.siqi_2023)
+        8 -> DataActivity(R.string.snow_and_icicle, R.string.siqi_2022)
+        9 -> DataActivity(R.string.trees_and_ocean, R.string.siqi_2021)
+        10 -> DataActivity(R.string.snow_mountain, R.string.siqi_2022)
+        11 -> DataActivity(R.string.waterwheel, R.string.siqi_2022)
+        else -> DataActivity(R.string.isiterror, R.string.easter_egg)
     }
-    val textSmall = when (showText) {
-        0 -> stringResource(R.string.siqi_2022)
-        1 -> stringResource(R.string.siqi_2022)
-        2 -> stringResource(R.string.siqi_2021)
-        3 -> stringResource(R.string.siqi_2022)
-        4 -> stringResource(R.string.siqi_2022)
-        5 -> stringResource(R.string.siqi_2021)
-        6 -> stringResource(R.string.siqi_2020)
-        7 -> stringResource(R.string.siqi_2023)
-        8 -> stringResource(R.string.siqi_2022)
-        9 -> stringResource(R.string.siqi_2021)
-        10 -> stringResource(R.string.siqi_2022)
-        11 -> stringResource(R.string.siqi_2022)
-        else -> stringResource(R.string.easter_egg)
-    }
-    Column (
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+    ) {
         Text(
-            text = textNumber,
-            fontSize = 20.sp
+            text = stringResource(texts.textNumber),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = modifier.height(3.dp))
         Text(
-            text = textSmall,
-            fontWeight = FontWeight.Bold
+            text = stringResource(texts.textSmall),
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Italic,
+            fontFamily = FontFamily.Serif,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }
@@ -214,7 +240,7 @@ fun ArtSpaceText(
 @Composable
 fun ChangePictureButton(
     onClick: () -> Unit,
-    Text: String,
+    text: String,
     horizontalAlignment: Alignment.Horizontal,
     modifier: Modifier = Modifier
 ) {
@@ -230,7 +256,7 @@ fun ChangePictureButton(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary)
         ) {
-            Text(text = Text)
+            Text(text = text)
         }
     }
 }
